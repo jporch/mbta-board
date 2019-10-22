@@ -1,6 +1,7 @@
 import React from 'react';
 import './DepartureList.css';
 import Departure from './Departure.js';
+import api_key from './key.js';
 
 class DepartureList extends React.Component {
     constructor(props) {
@@ -11,12 +12,12 @@ class DepartureList extends React.Component {
     }
     
     componentDidMount() {
-        fetch('https://api-v3.mbta.com/schedules?filter[stop]=South%20Station&sort=time')
+        fetch('https://api-v3.mbta.com/schedules?filter[stop]=South%20Station&sort=time&api_key='+api_key)
         .then(results => {
             return results.json();
         }).then(res => {
-            this.setState({departures: res['data']});
-            console.log(res.data);
+            const filtered = res['data'].filter(d => d.attributes.departure_time != null);
+            this.setState({departures: filtered.slice(0,10)});
         });
     }
 
