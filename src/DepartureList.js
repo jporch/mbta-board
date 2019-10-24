@@ -15,7 +15,7 @@ class DepartureList extends React.Component {
     }
     
     componentDidMount() {
-        const now = new Date();
+        //const now = new Date();
         //const curTime = now.getHours().toString()+":"+now.getMinutes().toString();
         fetch('https://api-v3.mbta.com/predictions?filter[stop]='+this.state.id+'&sort=-time&include=stop&api_key='+api_key)
         .then(results => {
