@@ -8,16 +8,22 @@ class DepartureList extends React.Component {
         super(props);
         this.state = {
             departures: [],
+            track: null,
+            title: props.title,
+            id: props.id,
         }
     }
     
     componentDidMount() {
-        fetch('https://api-v3.mbta.com/schedules?filter[stop]=South%20Station&sort=time&api_key='+api_key)
+        const now = new Date();
+        //const curTime = now.getHours().toString()+":"+now.getMinutes().toString();
+        fetch('https://api-v3.mbta.com/predictions?filter[stop]='+this.state.id+'&sort=-time&include=stop&api_key='+api_key)
         .then(results => {
             return results.json();
         }).then(res => {
-            const filtered = res['data'].filter(d => d.attributes.departure_time != null);
-            this.setState({departures: filtered.slice(0,10)});
+            const filtered = res.data.filter(d => d.attributes.departure_time != null && d.attributes.status != null);
+            this.setState({departures: filtered});
+            this.setState({track: res.included[0].attributes.platform_code});
         });
     }
 
@@ -25,13 +31,19 @@ class DepartureList extends React.Component {
         const departures = this.state.departures.map((departure) =>
             <Departure 
                 key={departure.id} 
-                departure={departure.id}
-                route={departure.relationships.route}
-                time={departure.attributes.departure_time}
+                departure={departure}
+                track={this.state.track}
             />
         );
         return ( 
-        <div id="departure">
+        <div className="departures">
+            <h2>{this.state.title}: Departures</h2>
+            <div className="departures-heading">
+                <span>Destination</span>
+                <span>Departure Time</span>
+                <span>Boarding Status</span>
+                <span>Track Number</span>
+            </div>
             {departures}
         </div>
         )

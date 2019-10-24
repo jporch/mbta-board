@@ -1,0 +1,22 @@
+.departures-heading {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.departures-heading span {
+    padding: 0 .5em;
+    flex-basis: 22%;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.departures {
+    border: 1px solid black;
+    margin: 1em;
+    padding: 1em;
+  }
+  
+  

@@ -1,0 +1,9 @@
+.departure {
+    display: flex;
+    justify-content: space-between;
+}
+
+.departure span {
+    padding: 0 .5em;
+    flex-basis: 22%;
+}

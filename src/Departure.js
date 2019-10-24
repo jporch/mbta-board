@@ -6,9 +6,12 @@ class Departure extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: props.departure,
-            route: props.route,
-            time: props.time,
+            id: props.departure.id,
+            route: props.departure.relationships.route,
+            time: props.departure.attributes.departure_time,
+            direction: props.departure.attributes.direction_id,
+            status: props.departure.attributes.status,
+            track: props.departure.track || "TBD",
         };
     }
 
@@ -17,12 +20,22 @@ class Departure extends React.Component {
         .then(results => {
             return results.json();
         }).then(res => {
-            this.setState({route_name: res.data.attributes.long_name});
+            this.setState({route_name: res.data.attributes.direction_destinations[this.state.direction]});
         });
     }
     
     render() {
-        return <div>{this.state.route_name}: {this.state.time}</div>
+        const timestamp = new Date(this.state.time);
+        //const dispTime = timestamp.getHours().toString()+":"+timestamp.getMinutes().toString()+" ";
+        const dispTime = timestamp.toLocaleTimeString();
+        return (
+            <div className="departure">
+                <span className="route">{this.state.route_name}</span>
+                <span className="departure-time">{dispTime}</span>
+                <span className="current-status">{this.state.status}</span>
+                <span className="track-number">{this.state.track}</span>
+            </div>
+        )
     }
 }
 
